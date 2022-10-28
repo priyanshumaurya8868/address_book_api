@@ -8,17 +8,21 @@ export interface CustomRequest extends Request {
   token: string | JwtPayload;
 }
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+ const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header("Authorization")?.replace("bearer ", "");
+    const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
       throw new Error();
     }
+    console.log("got token : "+token);
     
    const decoded = jwt.verify(token, SECRET_KEY);
    (req as CustomRequest).token = decoded;
     next();
   } catch (error) {
+    console.log(error)
     res.status(401).send('Please authenticate')
   }
 };
+
+export default auth;
