@@ -42,10 +42,16 @@ export const getmyAddressBook = async (
   res: Response,
   next: NextFunction
 ) => {
+  const searchString = (req.query.search || "").toString();
+
   try {
     const user_data = (req as CustomRequest).token as jwt.JwtPayload;
-    console.log("fetching address of : " + user_data._id);
-    const address_book = await AddressBook.find({ user: user_data._id });
+    // const address_book = await AddressBook.find({ user: user_data._id }).where(
+    //    { $text: { $search: searchString } },
+    // );
+    console.log(searchString)
+    var searchKey = new RegExp(searchString, 'i')
+      const address_book = await AddressBook.find({ user: user_data._id, name : searchKey}).where();  
     res.status(200).json({ address_book });
   } catch (error) {
     next(error);
@@ -61,8 +67,8 @@ export const updateAddressBookEntry = async (
     const user_data = (req as CustomRequest).token as jwt.JwtPayload;
     const { _id, name, address, phone } = req.body;
 
-    if(!_id){
-      return next(ApiError.badRequest("_id is missing in Request body"))
+    if (!_id) {
+      return next(ApiError.badRequest("_id is missing in Request body"));
     }
 
     const toUpdate = await AddressBook.findOne({
@@ -100,15 +106,20 @@ export const deleteEntrybyId = async (
   const id = req.params.id || "";
 
   if (!id) {
-    return next(ApiError.badRequest("required pram id is missing!"));
+    return next(ApiError.badRequest("required param id is missing!"));
   }
 
   try {
-   const result = await AddressBook.findOneAndDelete({ user: user_data._id, _id: id });
- 
-   if(!result){
-   return next(ApiError.resourceNotFound("no such record exists in your address book!"))
-   }
+    const result = await AddressBook.findOneAndDelete({
+      user: user_data._id,
+      _id: id,
+    });
+
+    if (!result) {
+      return next(
+        ApiError.resourceNotFound("no such record exists in your address book!")
+      );
+    }
 
     res.status(200).json({ status: "Success", msg: "Deleted!" });
   } catch (error) {

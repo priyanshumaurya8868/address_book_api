@@ -15,8 +15,12 @@ const AddressBookSchema: mongoose.Schema<I_AddressBookDocument> =
     phone: { type: String },
   });
 
+AddressBookSchema.index({ name : 'text'})
+
 const AddressBook = mongoose.model<I_AddressBookDocument>(
   "AddressBook",
   AddressBookSchema
 );
+
+AddressBook.createIndexes()
 export default AddressBook;
