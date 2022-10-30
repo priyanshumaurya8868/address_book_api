@@ -1,4 +1,4 @@
-# **Unrevealed Api specs.**
+# **Addressbook Api specs.**
 
 ### Authentication Header:[ ]()
 
