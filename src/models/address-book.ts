@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface I_AddressBookDocument extends mongoose.Document {
-  user: mongoose.Schema.Types.ObjectId;
+  user: String | mongoose.Schema.Types.ObjectId | null;
   name: string;
   address: string;
   phone: string;

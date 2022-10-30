@@ -16,6 +16,10 @@ class ApiError {
   static resourceConflict(msg : string){
     return new ApiError(409,msg)
   }
+
+  static clientForbidden(msg : string){
+    return new ApiError(403,msg)
+  }
   
   static badRequest(msg : string) {
     return new ApiError(400, msg);

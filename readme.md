@@ -1,32 +1,37 @@
 # **Unrevealed Api specs.**
+
 ### Authentication Header:[ ]()
+
 You can read the authentication header from the headers of the request
 
-|Authorization: Token jwt.token.here|
-| :- |
+| Authorization: Token jwt.token.here |
+| :---------------------------------- |
 
 ## Installation.
-| $ npm install|
-| :- |
+
+| $ npm install |
+| :------------ |
 
 ## Run application
-|npm start|
-| :- |
 
-
-
+| npm start |
+| :-------- |
 
 # Error Handling
+
 ### Errors and Status Codes
+
 If a request fails any validations, expect a 422 and errors in the following format:
 
       {
-      “status” : “Failure”, 
+      “status” : “Failure”,
 
       “message” : “reason why it failed”
+
 }
 
 #### Other status codes:[ ](https://realworld-docs.netlify.app/docs/specs/backend-specs/error-handling#other-status-codes)
+
 401 for Unauthorized requests, when a request requires authentication but it isn't provided
 
 403 for Forbidden requests, when a request may be valid but the user doesn't have permissions to perform the action
@@ -35,9 +40,7 @@ If a request fails any validations, expect a 422 and errors in the following for
 
 500 for server side error, etc...
 
-
-
-###  **Sign up.**
+### **Sign up.**
 
 `POST:: /auth/signup`
 
@@ -48,10 +51,9 @@ Example **request body**:
         "password": "123456"
     }
 
-**No authentication** required, returns a response 
+**No authentication** required, returns a response
 
-Required fields:  name, password.
-
+Required fields: name, password.
 
 Example **response body**:
 
@@ -61,9 +63,7 @@ Example **response body**:
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVhOTg2NmE1YzQ4ODk3OWE4OTI4ODUiLCJuYW1lIjoidXNlcjEiLCJpYXQiOjE2NjcwODYyMDUsImV4cCI6MTY2NzA4OTgwNX0.mnEMiBZGXUcPS2xvTGhRSo7IwKt-Ca9IFzm2Q-K6jxM"
     }
 
-
-
-###  **Sign in.**
+### **Sign in.**
 
 `POST:: /auth/signin`
 
@@ -74,10 +74,9 @@ Example **request body**:
         "password": "123456"
     }
 
-**No authentication** required, returns a response 
+**No authentication** required, returns a response
 
-Required fields:  name, password.
-
+Required fields: name, password.
 
 Example **response body**:
 
@@ -87,9 +86,8 @@ Example **response body**:
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVhOTg2NmE1YzQ4ODk3OWE4OTI4ODUiLCJuYW1lIjoidXNlcjEiLCJpYXQiOjE2NjcwODYyMDUsImV4cCI6MTY2NzA4OTgwNX0.mnEMiBZGXUcPS2xvTGhRSo7IwKt-Ca9IFzm2Q-K6jxM"
     }
 
+### **add entry in your address book.**
 
-
-###  **add entry in your address book.**
 `POST:: /addressbook`
 
 Example request body:
@@ -117,6 +115,81 @@ Required fields: name, address, phone
         }
     }
 
+### **add entries in your address book.**
+
+`POST:: /addressbook/bulk`
+
+Example request body:
+
+    {
+        "entries":[
+            {
+                "name" : "u1_e10",
+                "address" : "a1",
+                "phone" : "123123"
+            },
+            {
+                "name" : "u1_e10",
+                "address" : "a1",
+                "phone" : "123123"
+            },
+            {
+                "name" : "u1_e10",
+                "address" : "a1",
+                "phone" : "123123"
+            },
+            {
+                "name" : "u1_e10",
+                "address" : "a1",
+                "phone" : "123123"
+            }
+        ]
+    }
+
+Authentication required, will return a response Body
+
+Required field: an array object (name, address, phone) with name `entries` 
+
+### Response body:
+    {
+        "address_book": [
+            {
+                "user": "635a9866a5c488979a892885",
+                "name": "u1_e10",
+                "address": "a1",
+                "phone": "123123",
+                "_id": "635eafb09c44d405bc4d2dc8",
+                "__v": 0
+            },
+            {
+                "user": "635a9866a5c488979a892885",
+                "name": "u1_e10",
+                "address": "a1",
+                "phone": "123123",
+                "_id": "635eafb09c44d405bc4d2dca",
+                "__v": 0
+            },
+            {
+                "user": "635a9866a5c488979a892885",
+                "name": "u1_e10",
+                "address": "a1",
+                "phone": "123123",
+                "_id": "635eafb09c44d405bc4d2dcc",
+                "__v": 0
+            },
+            {
+                "user": "635a9866a5c488979a892885",
+                "name": "u1_e10",
+                "address": "a1",
+                "phone": "123123",
+                "_id": "635eafb09c44d405bc4d2dce",
+                "__v": 0
+            }
+        ]
+    }
+
+
+### **Get My Addressbook**
 `GET:: /addressbook?search=`
 
 Returns user's addressbook
@@ -125,7 +198,13 @@ Query Parameters:
 
 Filter by name:
 
- `search=Priya`
+`search=Priya`
+
+limit/skip number of entries (default is 20/0):
+
+`limit=20`
+
+`skip=0`
 
 Authentication required.
 
@@ -157,14 +236,36 @@ Response Body:
                 "phone": "123123",
                 "__v": 0
             },
-        
+
         ]
     }
 
-###  **Update entry of your address book.**
+### **Get Addressbook Entry by id**
+
+`GET:: /addressbook/:id`
+
+Required Param : **id**
+
+Authentication required, will return a response Body
+
+Response Body :
+
+    {
+        "record": {
+            "_id": "635eafb09c44d405bc4d2dcc",
+            "user": "635a9866a5c488979a892885",
+            "name": "u1_e10",
+            "address": "a1",
+            "phone": "123123",
+            "__v": 0
+        }
+    }
+
+### **Update entry of your address book.**
+
 `PUT:: /addressbook`
 
-Example request body: `_id` field is *mandatory to include* in the request body and rest of the fields are optional
+Example request body: `_id` field is _mandatory to include_ in the request body and rest of the fields are optional
 
     {
         "_id": "635dbc8a1c052c27e0d0aed6",
@@ -175,7 +276,7 @@ Example request body: `_id` field is *mandatory to include* in the request body 
 
 Authentication required, will return a response Body
 
-Required fields: _id
+Required fields: \_id
 
 ### Response body:
 
@@ -190,8 +291,9 @@ Required fields: _id
         }
     }
 
-### 9  **Delete Entry**
-`DELETE:: /addressbook`
+### **Delete Entry**
+
+`DELETE:: /addressbook/:id`
 
 Required Param : **id**
 
