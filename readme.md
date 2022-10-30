@@ -1,4 +1,4 @@
-# **Unrevealed Api specs.**
+# **Address Book Api specs.**
 ### Authentication Header:[ ]()
 You can read the authentication header from the headers of the request
 
